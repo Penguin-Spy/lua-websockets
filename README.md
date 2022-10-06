@@ -1,8 +1,7 @@
-# Not maintained / maintainer wanted !!!!
-
-If someone wants to maintain / take ownership of this project, reach out to me (issue, email). I like Lua very much, but I don't have enough time / resources to stay engaged with it.
-
 # About
+
+This is a fork of [lipp/lua-websockets](https://github.com/lipp/lua-websockets), maintained for Lua 5.4  
+It will mostly be just simple patches, so I do not intend to change the project structure much (i also don't know what 2/3 of the files here are for lol)
 
 This project provides Lua modules for [Websocket Version 13](http://tools.ietf.org/html/rfc6455) conformant clients and servers. 
 [![Build Status](https://travis-ci.org/lipp/lua-websockets.svg?branch=master)](https://travis-ci.org/lipp/lua-websockets)
@@ -119,15 +118,16 @@ var echoWs = new WebSocket('ws://127.0.0.1:8002','echo');
 The client and server modules depend on:
 
   - luasocket
-  - luabitop (if not using Lua 5.2 nor luajit)
+  - bit32
   - luasec
   - copas (optionally)
   - lua-ev (optionally)
+You must manually install copas/lua-ev to use their corresponding websocket modules!
 
 # Install
 
 ```shell
-$ git clone git://github.com/lipp/lua-websockets.git
+$ git clone git://github.com/Penguin-Spy/lua-websockets.git
 $ cd lua-websockets
 $ luarocks make rockspecs/lua-websockets-scm-1.rockspec
 ```
