@@ -1,38 +1,39 @@
-local socket = require'socket'
-local sync = require'websocket.sync'
-local tools = require'websocket.tools'
+local socket = require 'socket'
+local sync = require 'websocket.sync'
+local tools = require 'websocket.tools'
 
 local new = function(ws)
   ws = ws or {}
-  local copas = require'copas'
-  
+  local copas = require 'copas'
+
   local self = {}
-  
-  self.sock_connect = function(self,host,port)
-    self.sock = socket.tcp()
+
+  self.sock_connect = function(self, host, port, ssl_params)
+    self.sock = copas.wrap(socket.tcp(), ssl_params)
     if ws.timeout ~= nil then
       self.sock:settimeout(ws.timeout)
     end
-    local _,err = copas.connect(self.sock,host,port)
+    local _, err = self.sock:connect(host, port)
     if err and err ~= 'already connected' then
       self.sock:close()
-      return nil,err
+      return nil, err
     end
   end
-  
-  self.sock_send = function(self,...)
-    return copas.send(self.sock,...)
+
+  self.sock_send = function(self, ...)
+    return self.sock:send(...)
   end
-  
-  self.sock_receive = function(self,...)
-    return copas.receive(self.sock,...)
+
+  self.sock_receive = function(self, ...)
+    return self.sock:receive(...)
   end
-  
+
   self.sock_close = function(self)
     self.sock:shutdown()
     self.sock:close()
   end
-  
+
+  self.copas = true
   self = sync.extend(self)
   return self
 end
