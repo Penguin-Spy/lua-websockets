@@ -59,7 +59,7 @@ local client = function(sock,protocol)
       on_error(err)
     end
   end
-  local user_on_message = function() end
+  local user_on_message = function(self,message,opcode) end
   local TEXT = frame.TEXT
   local BINARY = frame.BINARY
   local on_message = function(message,opcode)
@@ -237,7 +237,7 @@ local listen = function(opts)
                 new_client = client(client_sock,protocol_index)
                 clients[protocol_index][new_client] = true
                 protocol_handler(new_client)
-                new_client:start(loop)
+                new_client:start()
               else
                 assert(sent < len)
                 index = sent
