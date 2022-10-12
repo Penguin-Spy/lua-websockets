@@ -29,7 +29,7 @@ local new = function(ws)
   end
 
   self.sock_close = function(self)
-    self.sock:shutdown()
+    if self.sock.socket.shutdown then self.sock:shutdown() end
     self.sock:close()
   end
 

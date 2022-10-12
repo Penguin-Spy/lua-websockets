@@ -5,8 +5,8 @@ local ssl = require 'ssl'
 local tinsert = table.insert
 local tconcat = table.concat
 
-local receive = function(self)
-  if self.state ~= 'OPEN' and not self.is_closing then
+local receive = function(self, is_closing)
+  if self.state ~= 'OPEN' and not is_closing then
     return nil, nil, false, 1006, 'wrong state'
   end
   local first_opcode
@@ -33,7 +33,7 @@ local receive = function(self)
     end
     if decoded then
       if opcode == frame.CLOSE then
-        if not self.is_closing then
+        if not is_closing then
           local code, reason = frame.decode_close(decoded)
           -- echo code
           local msg = frame.encode_close(code)
@@ -100,8 +100,7 @@ local close = function(self, code, reason)
   local code = 1005
   local reason = ''
   if n == #encoded then
-    self.is_closing = true
-    local rmsg, opcode = self:receive()
+    local rmsg, opcode = self:receive(true)
     if rmsg and opcode == frame.CLOSE then
       code, reason = frame.decode_close(rmsg)
       was_clean = true
