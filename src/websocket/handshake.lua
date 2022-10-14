@@ -56,6 +56,11 @@ local upgrade_request = function(req)
   if req.port and req.port ~= 80 then
     lines[2] = format('Host: %s:%d',req.host,req.port)
   end
+  if req.headers then
+    for name, value in pairs(req.headers) do
+      tinsert(lines, name .. ": " .. value)
+    end
+  end
   tinsert(lines,'\r\n')
   return table.concat(lines,'\r\n')
 end
